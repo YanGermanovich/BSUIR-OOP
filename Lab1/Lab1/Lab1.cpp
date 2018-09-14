@@ -214,7 +214,7 @@ public:
 		int result;
 		cout << key;
 		cin >> result;
-		while (cin.fail()) {
+		while (cin.fail() || cin.peek() != '\n') {
 			cout << errorMessage << std::endl;
 			cin.clear();
 			cin.ignore(256, '\n');
@@ -263,9 +263,10 @@ private:
 };
 
 void SizeMatrix(Matrix* matrix, string matrixName) {
-	string pleaseEnterMessage = "Please enter rows and columns count (integer >3) for " + matrixName;
+	string pleaseEnterMessage = "Please enter rows and columns count (integer > 2) for " + matrixName;
 	string rowMessage = "Rows:";
 	string colMessage = "Columns (should be odd and not bigger than rows): ";
+	string errMessage = "Error, please reenter the value!";
 	int rowCount;
 	int colCount;
 
@@ -274,12 +275,14 @@ void SizeMatrix(Matrix* matrix, string matrixName) {
 	rowCount = GetValueFromConsole::GetInt(rowMessage);
 
 	while (rowCount <= 2) {
+		cout << errMessage << endl;
 		rowCount = GetValueFromConsole::GetInt(rowMessage);
 	}
 
 	colCount = GetValueFromConsole::GetInt(colMessage);
 
 	while (rowCount < colCount || colCount % 2 == 0 || colCount <= 2) {
+		cout << errMessage << endl;
 		colCount = GetValueFromConsole::GetInt(colMessage);
 	}
 
