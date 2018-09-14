@@ -263,7 +263,7 @@ private:
 };
 
 void SizeMatrix(Matrix* matrix, string matrixName) {
-	string pleaseEnterMessage = "Please enter rows and columns count (integer) for " + matrixName;
+	string pleaseEnterMessage = "Please enter rows and columns count (integer >3) for " + matrixName;
 	string rowMessage = "Rows:";
 	string colMessage = "Columns (should be odd and not bigger than rows): ";
 	int rowCount;
@@ -273,13 +273,13 @@ void SizeMatrix(Matrix* matrix, string matrixName) {
 
 	rowCount = GetValueFromConsole::GetInt(rowMessage);
 
-	while (rowCount <= 0) {
+	while (rowCount <= 2) {
 		rowCount = GetValueFromConsole::GetInt(rowMessage);
 	}
 
 	colCount = GetValueFromConsole::GetInt(colMessage);
 
-	while (rowCount < colCount || colCount % 2 == 0 || colCount <= 0) {
+	while (rowCount < colCount || colCount % 2 == 0 || colCount <= 2) {
 		colCount = GetValueFromConsole::GetInt(colMessage);
 	}
 
