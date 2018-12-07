@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include <iostream>
 #include <string>
+#include <regex> 
+#include <Windows.h>
 
 using namespace std;
 
@@ -77,7 +79,7 @@ string CasinoGame::ToString()
 
 void CasinoGame::NewGame()
 {
-	cout << "Game " + this->Name + "started \n";
+	cout << "Game " + this->Name + " started \n";
 }
 
 CasinoGame::~CasinoGame()
@@ -169,13 +171,120 @@ Pokerstar::~Pokerstar()
 
 #pragma endregion
 
+void printError(string msg) {
+	cout << endl << "Error. Incorect values." << endl;
+	cout << msg;
+}
+
+int getIntValue(string msg) {
+	string value;
+	int intValue;
+	bool isValidValue = true;
+	regex pattern("[[:digit:]]+");
+
+	cout << msg;
+
+	do {
+		getline(cin, value, '\n');
+
+		while (!regex_match(value, pattern) || value.empty() || value == "0") {
+			printError(msg);
+			getline(cin, value, '\n');
+		}
+
+		try {
+			intValue = stoi(value);
+			isValidValue = true;
+		}
+		catch (out_of_range) {
+			isValidValue = false;
+			cout << "Max value - 2147483647" << endl;
+			printError(msg);
+		}
+
+	} while (!isValidValue);
+
+	return intValue;
+}
+
+string getStringValue(string msg) {
+	string value;
+	cout << msg;
+
+	do
+	{
+		getline(cin, value, '\n');
+
+		while (value[0] == ' ') {
+			value.erase(0, 1);
+		}
+
+		if (value.empty()) {
+			printError(msg);
+		}
+
+	} while (value.empty());
+
+	return value;
+}
 
 int main()
 {
-	CasinoGame* pokerStar = new Pokerstar("Best game", 2, "pokerstar.com", "200$", "yan_germanovich", "12345", "Igor");
+	string msg = "";
+	
+
+	cout << "Enter data for pokerstar:" << endl;
+
+	string name;
+	string url;
+	string price;
+	string login;
+	string password;
+	string stickman;
+	int tempInt;
+
+	name = getStringValue("Name: ");
+
+	tempInt = getIntValue("Min player count: ");
+
+	url = getStringValue("Url: ");
+
+	price = getStringValue("Price: ");
+
+	login = getStringValue("Login: ");
+
+	password = getStringValue("Password: ");
+
+	stickman = getStringValue("Stickman: ");
+	
+	Pokerstar* pokerStar = new Pokerstar(name, tempInt, url, price, login, password, stickman);
+
+	cout << endl;
+
+	pokerStar->GetMoneyToCard();
+
+	cout << endl;
 
 	cout << pokerStar->ToString();
 
+	cout << endl;
+
+	PvPGame* pvp = new PvPGame("Game 2", 1);
+
+	pvp->StartBetting();
+	cout << pvp->ToString();
+
+	cout << endl;
+
+	VirtualGame* virtualGame = new VirtualGame("Game v", false, "1.com", "2 $");
+
+	virtualGame->NewGame();
+
+	cout << virtualGame->ToString();
+
+	delete pokerStar;
+	delete pvp;
+	delete virtualGame;
 
 	system("pause");
 	return 0;
